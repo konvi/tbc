@@ -21,11 +21,6 @@
   <web-item name="Radio Paradise" i18n-name-key="radio-paradise.name" key="radio-paradise" section="client-sites-link/my-section" weight="1000">
     <description key="radio-paradise.description">The Radio Paradise Plugin</description>
     <label key="radio-paradise.label"></label>
-    <link linkId="radio-paradise-link">/test</link>
-  </web-item>
-  <web-item name="Radio Paradise 2 " i18n-name-key="radio-paradise.name" key="radio-paradise-2" section="client-sites-link/my-section" weight="1000">
-    <description key="radio-paradise.description">The Radio Paradise Plugin 2</description>
-    <label key="radio-paradise.label"></label>
-    <link linkId="radio-paradise-link">test</link>
+    <link linkId="radio-paradise-link">/plugins/servlet/test</link>
   </web-item>
 </atlassian-plugin>
