@@ -81,7 +81,12 @@
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
                     <enableQuickReload>true</enableQuickReload>
-                    <instructions/>
+                    <instructions>
+                        <Require-Capability>
+                            <![CDATA[osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"]]>
+                        </Require-Capability>
+                        <CONF_COMM />
+                    </instructions>
                 </configuration>
             </plugin>
             <plugin>
@@ -89,6 +94,15 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/module-info.class</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
