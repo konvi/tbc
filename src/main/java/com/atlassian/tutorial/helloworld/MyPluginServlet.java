@@ -12,29 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Named
 public class MyPluginServlet extends HttpServlet {
-//	private static final Logger log = LoggerFactory.getLogger(MyPluginServlet.class);
 
-//	@Override
-//	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		resp.setContentType("text/html");
-//		resp.getWriter().write("<html><body>Hello! You did it.</body></html>");
-//
-//	}
-
-
-	//private static final String PLUGIN_STORAGE_KEY = "com.atlassian.plugins.tutorial.refapp.adminui";
-//	@ComponentImport
 	private final WorklogManager worklogManager;
-//	@ComponentImport
-//	private final LoginUriProvider loginUriProvider;
-//	@ComponentImport
-//	private final TemplateRenderer templateRenderer;
-//	@ComponentImport
-//	private final PluginSettingsFactory pluginSettingsFactory;
 
 	@Inject
 	public MyPluginServlet(WorklogManager worklogManager) {
@@ -44,18 +33,76 @@ public class MyPluginServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-
-		Long since = LocalDate.now().minusDays(3L).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
-		List<Worklog> worklogs = worklogManager.getWorklogsUpdatedSince(since);
+		// 17/Jul/19 10:54 PM - 22/Aug/19
+		Long since = LocalDate.of(2019, 7, 17).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
+		Long to = LocalDate.of(2019, 8, 23).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
+		List<Worklog> worklogs = getWorklogsUpdated(since, to);
 
 		response.setContentType("text/html");
 
-
+		Map<String, Map<String, Long>> timeByDevByItem = new HashMap<>();
+		Map<String, Long> estimationByItem = new HashMap<>();
+		Set<String> devs = new HashSet<>();
 		for (Worklog worklog : worklogs) {
-			response.getWriter().write(" " + worklog.getAuthorObject().getDisplayName() + " " +
-					worklog.getIssue() + "  " + worklog.getTimeSpent() + "\r\n");
+			Map<String, Long> timeByDev = timeByDevByItem.computeIfAbsent(worklog.getIssue().getKey(), key -> new HashMap<>());
+			if (timeByDev.containsKey(worklog.getAuthorObject().getDisplayName())) {
+				timeByDev.put(worklog.getAuthorObject().getDisplayName(),
+						timeByDev.get(worklog.getAuthorObject().getDisplayName()) + worklog.getTimeSpent());
+			} else {
+				timeByDev.put(worklog.getAuthorObject().getDisplayName(), worklog.getTimeSpent());
+			}
+			devs.add(worklog.getAuthorObject().getDisplayName());
+			estimationByItem.put(worklog.getIssue().getKey(), worklog.getIssue().getOriginalEstimate());
+//			response.getWriter().write(" " + worklog.getAuthorObject().getDisplayName() + " " +
+//					worklog.getIssue() + "  " + worklog.getTimeSpent() + "\r\n");
 		}
 
+		response.getWriter().write("<table>");
+		response.getWriter().write("<thead><tr><th>Item</th><th>Estimation</th>");
+
+		List<String> devsAlphabetically = new ArrayList<>(devs);
+		Collections.sort(devsAlphabetically);
+		for (String dev : devsAlphabetically) {
+			response.getWriter().write("<th>" + dev + "</th>");
+		}
+		response.getWriter().write("</th></thead><tbody>");
+		for (String item : timeByDevByItem.keySet()) {
+			response.getWriter().write("<tr><td>" + item + "</td><td>" + estimationByItem.get(item) + "</td>");
+			Map<String, Long> timeByDev = timeByDevByItem.get(item);
+			devsAlphabetically.forEach(dev -> {
+				try {
+					response.getWriter().write("<td>" + (timeByDev.get(dev) == null ? "" : timeByDev.get(dev)) + "</td>");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}
+		response.getWriter().write("</table>");
+	}
+
+	public List<Worklog> getWorklogsUpdated(final Long sinceInMilliseconds, final Long toInMilliseconds) {
+		List<Worklog> result = new ArrayList<>();
+		long pageStart = sinceInMilliseconds;
+		do
+		{
+			final List<Worklog> worklogsUpdatedSince = worklogManager.getWorklogsUpdatedSince(pageStart);
+			boolean needMore = true;
+
+			for (Worklog worklog : worklogsUpdatedSince) {
+				if (toInMilliseconds >= worklog.getUpdated().getTime()) {
+					result.add(worklog);
+				} else {
+					needMore = false;
+					break;
+				}
+			}
+			if (!needMore || worklogsUpdatedSince.size() < WorklogManager.WORKLOG_UPDATE_DATA_PAGE_SIZE) {
+				break;
+			}
+			pageStart = worklogsUpdatedSince.get(worklogsUpdatedSince.size() - 1).getUpdated().getTime();
+		} while (pageStart < toInMilliseconds);
+
+		return result;
 	}
 
 //	@Override
