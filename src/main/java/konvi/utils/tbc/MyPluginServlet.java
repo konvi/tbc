@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.helloworld;
+package konvi.utils.tbc;
 
 import com.atlassian.jira.issue.worklog.Worklog;
 import com.atlassian.jira.issue.worklog.WorklogManager;

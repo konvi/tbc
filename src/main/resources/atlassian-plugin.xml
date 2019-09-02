@@ -6,8 +6,8 @@
     <version>${project.version}</version>
     <vendor name="${project.organization.name}" url="${project.organization.url}"/>
   </plugin-info>
-  <resource type="i18n" name="i18n" location="com.atlassian.tutorial.helloworld"/>
-  <servlet name="adminUI" class="com.atlassian.tutorial.helloworld.MyPluginServlet" key="test">
+  <resource type="i18n" name="i18n" location="konvi.utils.tbc"/>
+  <servlet name="adminUI" class="konvi.utils.tbc.MyPluginServlet" key="test">
     <url-pattern>/test</url-pattern>
   </servlet>
   <web-section name="mySection" i18n-name-key="my-section.name" key="my-section" location="client-sites-link" weight="1000">
