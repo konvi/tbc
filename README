@@ -1,3 +1,15 @@
-Source code for:
+My Steps:
 
+0. Source code for:
 https://developer.atlassian.com/display/DOCS/Set+up+the+Atlassian+Plugin+SDK+and+Build+a+Project
+
+1. There is a tutorial on Atlassian, but there is no clear way how to make thing work. 
+I ended up with cloning helloworld from bitbucket and after some time changed JIRA and AMPS versions. 
+So it started to work after it.
+
+2. https://ecosystem.atlassian.net/browse/ATLASSDK-93 says to change atlas-mvn:
+rem set MVN_COMMAND=
+rem call set MVN_COMMAND=%%MVN_COMMAND:${mavenPluginName}=%MVN_PLUGIN%%%
+call set MVN_COMMAND=%%MVN_COMMAND:%%
+
+3. Exclude module-info: https://community.atlassian.com/t5/Answers-Developer-Questions/Re-Re-JIRA-plugin-with-JDK-1-8/qaq-p/1094785/comment-id/118810#M118810
