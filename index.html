@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h3>My Steps:</h3>
+<p>
+1. There is a tutorial on Atlassian:
+<a href="https://developer.atlassian.com/server/framework/atlassian-sdk/create-a-helloworld-plugin-project/">https://developer.atlassian.com/server/framework/atlassian-sdk/create-a-helloworld-plugin-project/</a>.
+But there is no clear way how to make thing work. 
+I ended up with cloning helloworld from Atlassian's Bitbucket.
+Then changed JIRA and AMPS versions, so it started to work after it.
+In parallel I read how another developer is struggling with making tutorial work: 
+<a href="https://www.zuehlke.com/blog/en/a-plugin-for-atlassian-jira-getting-started/">https://www.zuehlke.com/blog/en/a-plugin-for-atlassian-jira-getting-started/</a>
+</p>
+<p>
+2. Another change I made was advised here:
+<a href="https://ecosystem.atlassian.net/browse/ATLASSDK-93">https://ecosystem.atlassian.net/browse/ATLASSDK-93</a> 
+It says to change atlas-mvn in the following way:
+<pre>
+rem set MVN_COMMAND=
+rem call set MVN_COMMAND=%%MVN_COMMAND:${mavenPluginName}=%MVN_PLUGIN%%%
+call set MVN_COMMAND=%%MVN_COMMAND:%%
+</pre>
+</p>
+<p>
+3. Exclude module-info: <a href="https://community.atlassian.com/t5/Answers-Developer-Questions/Re-Re-JIRA-plugin-with-JDK-1-8/qaq-p/1094785/comment-id/118810#M118810">https://community.atlassian.com/t5/Answers-Developer-Questions/Re-Re-JIRA-plugin-with-JDK-1-8/qaq-p/1094785/comment-id/118810#M118810</a>
+</p>
+</body>
+</html>
