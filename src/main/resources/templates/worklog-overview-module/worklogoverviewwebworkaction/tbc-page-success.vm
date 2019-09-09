@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>TBC</title>
+	<meta name="decorator" content="atl.general"/>
+</head>
+<body>
+<div id="page">
+	<section id="content" role="main">
+
+		<header class="aui-page-header">
+			<div class="aui-page-header-inner">
+				<div class="aui-page-header-main">
+					<h1>TbC</h1>
+				</div>
+			</div>
+		</header>
+
+		<div class="aui-page-panel">
+			<div class="aui-page-panel-inner">
+				<div class="aui-page-panel-nav">
+					<nav class="aui-navgroup aui-navgroup-vertical">
+						<div class="aui-navgroup-inner">
+							<ul class="aui-nav">
+								<li class="aui-nav-selected"><a href="${req.contextPath}/secure/WorklogOverviewPageWebworkAction.jspa">Overview Page</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+				<section class="aui-page-panel-content">
+					<div id="kdp-overview-page-container"></div>
+				</section>
+			</div>
+		</div>
+	</section>
+</div>
+</body>
+</html>
