@@ -20,7 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The first version of TBC: servlet-based.
+ */
 @Named
+@Deprecated
 public class MyPluginServlet extends HttpServlet {
 
 	private final WorklogManager worklogManager;
@@ -34,8 +38,8 @@ public class MyPluginServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		// 17/Jul/19 10:54 PM - 22/Aug/19
-		Long since = LocalDate.of(2019, 7, 17).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
-		Long to = LocalDate.of(2019, 8, 23).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
+		Long since = LocalDate.of(2019, 9, 23).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
+		Long to = LocalDate.of(2019, 10, 18).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
 		List<Worklog> worklogs = getWorklogsUpdated(since, to);
 
 		response.setContentType("text/html");
@@ -80,7 +84,7 @@ public class MyPluginServlet extends HttpServlet {
 		response.getWriter().write("</table>");
 	}
 
-	public List<Worklog> getWorklogsUpdated(final Long sinceInMilliseconds, final Long toInMilliseconds) {
+	private List<Worklog> getWorklogsUpdated(final Long sinceInMilliseconds, final Long toInMilliseconds) {
 		List<Worklog> result = new ArrayList<>();
 		long pageStart = sinceInMilliseconds;
 		do
@@ -104,13 +108,4 @@ public class MyPluginServlet extends HttpServlet {
 
 		return result;
 	}
-
-//	@Override
-//	protected void doPost(HttpServletRequest req, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-//		pluginSettings.put(PLUGIN_STORAGE_KEY + ".name", req.getParameter("name"));
-//		pluginSettings.put(PLUGIN_STORAGE_KEY + ".age", req.getParameter("age"));
-//		response.sendRedirect("test");
-//	}
 }

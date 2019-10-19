@@ -1,75 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2"> 
-  <plugin-info> 
-    <description>${project.description}</description>  
-    <version>${project.version}</version>  
-    <vendor name="${project.organization.name}" url="${project.organization.url}"/> 
-  </plugin-info>  
-  <resource type="i18n" name="i18n" location="konvi.utils.tbc"/>  
-  <servlet name="adminUI" class="konvi.utils.tbc.MyPluginServlet" key="test"> 
-    <url-pattern>/test</url-pattern> 
-  </servlet>  
-  <web-section name="mySection" i18n-name-key="my-section.name" key="my-section" location="client-sites-link" weight="1000"> 
-    <description key="my-section.description">The mySection Plugin</description> 
-  </web-section>  
-  <web-item name="Client Sites" i18n-name-key="client-sites.name" key="client-sites" section="system.top.navigation.bar" weight="1000"> 
-    <description key="client-sites.description">The Client Sites Plugin</description>  
-    <label key="client-sites.label"/>  
-    <link linkId="client-sites-link"/> 
-  </web-item>  
-  <web-item name="Radio Paradise" i18n-name-key="radio-paradise.name" key="radio-paradise" section="client-sites-link/my-section" weight="1000"> 
-    <description key="radio-paradise.description">The Radio Paradise Plugin</description>  
-    <label key="radio-paradise.label"/>  
-    <link linkId="radio-paradise-link">/plugins/servlet/test</link> 
-  </web-item>  
-  <web-item key="tbc_overview_webitem" name="tbc_overview_webitem" section="client-sites-link/my-section"> 
-    <label key="tbc-plugin.admin.overview.page.web.item.name"/>  
-    <link linkId="tbc_overview_webitem_link">/secure/WorklogOverviewWebworkAction.jspa</link> 
-  </web-item>  
-  <rest name="Worklog Overview Page Resource" i18n-name-key="tbc-plugin.rest.resources.name" key="worklog-overview-page-resource" path="/tbc-page" version="1.0"> 
-    <description key="tbc-plugin.rest.resources.description">TBC REST Resources</description>  
-    <!--<package>konvi.utils.tbc.rest</package>--> 
-  </rest>  
-  <!-- ====================== -->  
-  <!-- OVERVIEW PAGE -->  
-  <!-- ====================== -->  
-  <web-resource key="tbc-plugin-resources--overview-page" name="kitchen-duty-plugin Web Resources for Overview Page"> 
-    <dependency>com.atlassian.auiplugin:ajs</dependency>  
-    <dependency>com.atlassian.auiplugin:aui-experimental-soy-templates</dependency>  
-    <transformation extension="soy"> 
-      <transformer key="soyTransformer"> 
-        <functions>com.atlassian.confluence.plugins.soy:soy-core-functions</functions> 
-      </transformer> 
-    </transformation>  
-    <!--<resource type="download" name="momentjs.js"
-              location="/js/3rdparty/moment-2.22.2.min.js"/>
-    <resource type="download" name="fullcalendar.js"
-              location="/js/3rdparty/fullcalendar-3.9.0.min.js"/>
-    <resource type="download" name="fullcalendar.css"
-              location="/css/3rdparty/fullcalendar-3.9.0.min.css"/> -->  
-    <resource type="download" name="worklog-overview-soy.js" location="templates-soy/worklog-overview.soy"/>  
-    <resource type="download" name="tbc-plugin--worklog-overview-page-controller.js" location="/js/tbc-plugin--worklog-overview-page-controller.js"/>  
-    <context>tbc-plugin</context> 
-  </web-resource>  
-  <webwork1 key="worklog-overview-module" name="Worklog Overview Module" i18n-name-key="worklog-overview-module.name"> 
-    <description key="worklog-overview-module.description">The Worklog Overview Module Plugin</description>  
-    <actions> 
-      <action name="konvi.utils.tbc.webwork.WorklogOverviewWebworkAction" alias="WorklogOverviewWebworkAction"> 
-        <view name="tbc-page-success">/templates/worklog-overview-module/worklogoverviewwebworkaction/tbc-page-success.vm</view> 
-      </action> 
-    </actions> 
-  </webwork1>
-  <webwork1 key="worklog-overview-page-module" name="Worklog Overview Page Module" i18n-name-key="worklog-overview-module.name">
-    <description key="worklog-overview-page-module.description">The Worklog Overview Module Plugin</description>
-    <actions>
-      <action name="konvi.utils.tbc.webwork.WorklogOverviewPageWebworkAction" alias="WorklogOverviewPageWebworkAction">
-        <view name="tbc-page-success">/templates/worklog-overview-module/worklogoverviewwebworkaction/tbc-page-success.vm</view>
-      </action>
-    </actions>
-  </webwork1>
-  <!--<web-resource name="My Web Resource" i18n-name-key="my-web-resource.name" key="my-web-resource">
-    <description key="my-web-resource.description">The My Web Resource Plugin</description>  
-    <resource name="tbcResTest" type="download" location="/js/tbc-plugin&#45;&#45;worklog.js"/>
-  </web-resource>-->
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}"/>
+	</plugin-info>
+	<resource type="i18n" name="i18n" location="konvi.utils.tbc"/>
+	<servlet name="adminUI" class="konvi.utils.tbc.MyPluginServlet" key="test">
+		<url-pattern>/test</url-pattern>
+	</servlet>
+	<web-section name="mySection" i18n-name-key="my-section.name" key="my-section" location="tbc-menu-link"
+				 weight="1000">
+		<description key="my-section.description">The mySection Plugin</description>
+	</web-section>
+	<web-item name="Client Sites" i18n-name-key="tbc-menu.name" key="tbc-menu"
+			  section="system.top.navigation.bar" weight="1000">
+		<description key="tbc-menu.description">The Client Sites Plugin</description>
+		<label key="tbc-menu.label"/>
+		<link linkId="tbc-menu-link"/>
+	</web-item>
+	<web-item name="Radio Paradise" i18n-name-key="tbc.worklog-report-servlet.name" key="tbc.worklog-report-servlet"
+			  section="tbc-menu-link/my-section" weight="1000">
+		<description key="tbc.worklog-report-servlet.description">The Radio Paradise Plugin</description>
+		<label key="tbc.worklog-report-servlet.label"/>
+		<link linkId="worklog-report-servlet-link">/plugins/servlet/test</link>
+	</web-item>
+	<web-item key="tbc_overview_webitem" name="tbc_overview_webitem" section="tbc-menu-link/my-section">
+		<label key="tbc.overview-page.web-item.name"/>
+		<link linkId="tbc_overview_webitem_link">/secure/WorklogOverviewWebworkAction.jspa</link>
+	</web-item>
+	<rest name="Worklog Overview Page Resource" i18n-name-key="tbc-plugin.rest.resources.name"
+		  key="worklog-overview-page-resource" path="/tbc-page" version="1.0">
+		<description key="tbc-plugin.rest.resources.description">TBC REST Resources</description>
+		<!--<package>konvi.utils.tbc.rest</package>-->
+	</rest>
+	<!-- ====================== -->
+	<!-- OVERVIEW PAGE -->
+	<!-- ====================== -->
+	<web-resource key="tbc-plugin-resources--overview-page" name="kitchen-duty-plugin Web Resources for Overview Page">
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
+		<dependency>com.atlassian.auiplugin:aui-experimental-soy-templates</dependency>
+		<transformation extension="soy">
+			<transformer key="soyTransformer">
+				<functions>com.atlassian.confluence.plugins.soy:soy-core-functions</functions>
+			</transformer>
+		</transformation>
+		<resource type="download" name="worklog-overview-soy.js" location="templates-soy/worklog-overview.soy"/>
+		<resource type="download" name="tbc-plugin--worklog-overview-page-controller.js"
+				  location="/js/tbc-plugin--worklog-overview-page-controller.js"/>
+		<context>tbc-plugin</context>
+	</web-resource>
+	<webwork1 key="worklog-overview-module" name="Worklog Overview Module" i18n-name-key="worklog-overview-module.name">
+		<description key="worklog-overview-module.description">The Worklog Overview Module Plugin</description>
+		<actions>
+			<action name="konvi.utils.tbc.webwork.WorklogOverviewWebworkAction" alias="WorklogOverviewWebworkAction">
+				<view name="tbc-page-success">
+					/templates/worklog-overview-module/worklogoverviewwebworkaction/tbc-page-success.vm
+				</view>
+			</action>
+		</actions>
+	</webwork1>
+	<webwork1 key="worklog-overview-page-module" name="Worklog Overview Page Module"
+			  i18n-name-key="worklog-overview-module.name">
+		<description key="worklog-overview-page-module.description">The Worklog Overview Module Plugin</description>
+		<actions>
+			<action name="konvi.utils.tbc.webwork.WorklogOverviewPageWebworkAction"
+					alias="WorklogOverviewPageWebworkAction">
+				<view name="tbc-page-success">
+					/templates/worklog-overview-module/worklogoverviewwebworkaction/tbc-page-success.vm
+				</view>
+			</action>
+		</actions>
+	</webwork1>
 </atlassian-plugin>
