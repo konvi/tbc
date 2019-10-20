@@ -11,7 +11,9 @@ AJS.toInit(function(){
 	AJS.$.ajax({
 		url: window.KDPrestUrl + '/tbc_page',
 		dataType: 'json',
-		success: function(items) {
+		success: function(data) {
+			const items = data.items;
+			const summary = data.summary;
 			var table = '<table class="aui"><thead>';
 			if (items !== 'undefined' && items.length > 0) {
 				table += "<td>Item</td><td>Estimation</td>";
@@ -28,11 +30,16 @@ AJS.toInit(function(){
 				var estimation = AJS.$(this).attr('estimation');
 				var devs = AJS.$(this).attr('devs');
 				var loggedByDev = AJS.$(this).attr('loggedByDev');
-				table += "<tr><td>" + item + "</td><td>" + estimation + "</td>";
+				table += "<tr><td>" + item + "</td><td>" + (estimation !== undefined ? estimation : '') + "</td>";
 				for (var i = 0; i < devs.length; i++) {
-					table += "<td>" + ((devs[i] in loggedByDev) ? loggedByDev[devs[i]] : '') + "</td>";
+					if (devs[i] in loggedByDev) {
+						const logged = loggedByDev[devs[i]];
+						table += "<td class='" + logged.activity + "'>" + logged.time + "</td>";
+					} else {
+						table += "<td></td>";
+					}
 				}
-				table += "<tr>";
+				table += "</tr>";
 				/*events.push({
 					title: users.join(', '),
 					start: AJS.$(this).attr('start'),
@@ -40,7 +47,23 @@ AJS.toInit(function(){
 					color: users.length > 0 ? '#36B37E' : '#FFAB00',
 				});*/
 			});
-			table += "</tbody></table>";
+
+			table += "</tbody><tfoot>";
+
+			// totals
+			AJS.$(summary).each(function() {
+				var item = AJS.$(this).attr('item');
+				var estimation = AJS.$(this).attr('estimation');
+				var devs = AJS.$(this).attr('devs');
+				var loggedByDev = AJS.$(this).attr('loggedByDev');
+				table += "<tr><td>" + item + "</td><td>" + (estimation !== undefined ? estimation : '') + "</td>";
+				for (var i = 0; i < devs.length; i++) {
+					table += "<td>" + ((devs[i] in loggedByDev) ? loggedByDev[devs[i]].time : '') + "</td>";
+				}
+				table += "</tr>";
+			});
+
+			table += "</tfoot></table>";
 			AJS.$('#tbc-overview').html(table);
 			//callback(events);
 		}

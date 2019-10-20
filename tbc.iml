@@ -18,7 +18,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.atlassian.jira:jira-func-tests:8.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-all:1.8.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.plugin:atlassian-spring-scanner-annotation:1.2.13" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.plugin:atlassian-spring-scanner-annotation:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.26" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.26" level="project" />

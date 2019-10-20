@@ -1,5 +1,7 @@
 package konvi.utils.tbc.rest;
 
+import konvi.utils.tbc.domain.TimeLogged;
+
 import javax.xml.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -15,13 +17,13 @@ public class WorklogOverviewPageResourceModel {
 	@XmlElement
 	private List<String> devs;
 	@XmlElement
-	private Map<String, Long> loggedByDev;
+	private Map<String, TimeLogged> loggedByDev;
 
 	public WorklogOverviewPageResourceModel() {
 	}
 
 	public WorklogOverviewPageResourceModel(String item,
-			Long estimation, Map<String, Long> loggedByDev, List<String> devs) {
+			Long estimation, Map<String, TimeLogged> loggedByDev, List<String> devs) {
 		this.item = item;
 		this.estimation = estimation;
 		this.loggedByDev = loggedByDev;
@@ -52,11 +54,11 @@ public class WorklogOverviewPageResourceModel {
 		this.devs = devs;
 	}
 
-	public Map<String, Long> getLoggedByDev() {
+	public Map<String, TimeLogged> getLoggedByDev() {
 		return loggedByDev;
 	}
 
-	public void setLoggedByDev(Map<String, Long> loggedByDev) {
+	public void setLoggedByDev(Map<String, TimeLogged> loggedByDev) {
 		this.loggedByDev = loggedByDev;
 	}
 }

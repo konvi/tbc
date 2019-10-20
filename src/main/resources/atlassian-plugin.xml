@@ -49,6 +49,7 @@
 		<resource type="download" name="worklog-overview-soy.js" location="templates-soy/worklog-overview.soy"/>
 		<resource type="download" name="tbc-plugin--worklog-overview-page-controller.js"
 				  location="/js/tbc-plugin--worklog-overview-page-controller.js"/>
+		<resource type="download" name="tbc-plugin--overview-page.css" location="/css/tbc-plugin--overview-page.css"/>
 		<context>tbc-plugin</context>
 	</web-resource>
 	<webwork1 key="worklog-overview-module" name="Worklog Overview Module" i18n-name-key="worklog-overview-module.name">

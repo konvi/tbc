@@ -1,9 +1,11 @@
 package konvi.utils.tbc.rest;
 
-//import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
-
 import com.atlassian.jira.issue.worklog.Worklog;
 import com.atlassian.jira.issue.worklog.WorklogManager;
+import konvi.utils.tbc.domain.Activity;
+import konvi.utils.tbc.domain.Summary;
+import konvi.utils.tbc.domain.TimeLogged;
+import konvi.utils.tbc.domain.WorklogService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,10 +33,12 @@ import java.util.Set;
 public class WorklogOverviewPageResource {
 
 	private final WorklogManager worklogManager;
+	//private final WorklogService worklogService;
 
 	@Inject
-	public WorklogOverviewPageResource(WorklogManager worklogManager) {
+	public WorklogOverviewPageResource(WorklogManager worklogManager/*, WorklogService worklogService*/) {
 		this.worklogManager = worklogManager;
+		//this.worklogService = worklogService;
 	}
 
 	@GET
@@ -55,34 +60,62 @@ public class WorklogOverviewPageResource {
 		Long to = LocalDate.of(2019, 10, 18).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
 		List<Worklog> worklogs = getWorklogsUpdated(since, to);
 
-		Map<String, Map<String, Long>> timeByDevByItem = new HashMap<>();
+		Map<String, Map<String, TimeLogged>> timeByDevByItem = new HashMap<>();
+		Summary summary = new Summary();
 		Map<String, Long> estimationByItem = new HashMap<>();
+
 		Set<String> devs = new HashSet<>();
 		for (Worklog worklog : worklogs) {
-			Map<String, Long> timeByDev = timeByDevByItem.computeIfAbsent(worklog.getIssue().getKey(), key -> new HashMap<>());
-			if (timeByDev.containsKey(worklog.getAuthorObject().getDisplayName())) {
-				timeByDev.put(worklog.getAuthorObject().getDisplayName(),
-						timeByDev.get(worklog.getAuthorObject().getDisplayName()) + worklog.getTimeSpent());
-			} else {
-				timeByDev.put(worklog.getAuthorObject().getDisplayName(), worklog.getTimeSpent());
+			Map<String, TimeLogged> timeByDev = timeByDevByItem.computeIfAbsent(worklog.getIssue().getKey(), key -> new HashMap<>());
+			TimeLogged timeLogged = timeByDev.get(worklog.getAuthorObject().getDisplayName());
+			if (timeLogged == null) {
+				timeLogged = new TimeLogged();
+				timeByDev.put(worklog.getAuthorObject().getDisplayName(), timeLogged);
 			}
+			timeLogged.addTime(worklog.getTimeSpent());
+			timeLogged.addActivity(WorklogService.getActivity(worklog));
+
 			devs.add(worklog.getAuthorObject().getDisplayName());
 			estimationByItem.put(worklog.getIssue().getKey(), worklog.getIssue().getOriginalEstimate());
+			summary.addWorklog(worklog);
 		}
 
 		List<String> devsAlphabetically = new ArrayList<>(devs);
 		Collections.sort(devsAlphabetically);
 
-		List<WorklogOverviewPageResourceModel> responseList = new ArrayList<>();
+		List<WorklogOverviewPageResourceModel> items = new ArrayList<>();
 		for (String item : timeByDevByItem.keySet()) {
-			responseList.add(new WorklogOverviewPageResourceModel(
+			items.add(new WorklogOverviewPageResourceModel(
 					item,
 					estimationByItem.get(item),
 					timeByDevByItem.get(item),
 					devsAlphabetically));
 		}
 
-		return Response.ok(responseList).build();
+		Comparator<WorklogOverviewPageResourceModel> nullsInTheEnd = (o1, o2) -> {
+			if (o1.getEstimation() != null && o2.getEstimation() == null) {
+				return -1;
+			} else if (o1.getEstimation() == null && o2.getEstimation() != null) {
+				return 1;
+			} else {
+				return o1.getItem().compareTo(o2.getItem());
+			}
+		};
+		items.sort(nullsInTheEnd);
+
+		List<WorklogOverviewPageResourceModel> summaries = new ArrayList<>();
+		for (Activity activity : summary.getActivityToDevToTime().keySet()) {
+			summaries.add(new WorklogOverviewPageResourceModel(
+					activity.name(),
+					null,
+					summary.getActivityToDevToTime().get(activity),
+					devsAlphabetically));
+		}
+
+		Map<String, List<WorklogOverviewPageResourceModel>> result = new HashMap<>();
+		result.put("items", items);
+		result.put("summary", summaries);
+		return Response.ok(result).build();
 	}
 
 	private List<Worklog> getWorklogsUpdated(final Long sinceInMilliseconds, final Long toInMilliseconds) {

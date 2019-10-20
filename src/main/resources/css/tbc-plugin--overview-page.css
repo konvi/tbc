@@ -1,0 +1,11 @@
+.DEV {
+	background: rgba(4, 139, 23, 0.2);
+}
+
+.MENTOR, .CR {
+	background: rgba(255, 127, 80, 0.2);
+}
+
+.DEV.CR, .DEV.MENTOR {
+	background: linear-gradient(45deg, rgba(4, 139, 23, 0.2), rgba(255, 127, 80, 0.2));
+}
